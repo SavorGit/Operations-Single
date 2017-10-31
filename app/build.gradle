@@ -9,7 +9,7 @@ android {
     }
 //    useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.savor.savorphone"
+        applicationId "om.savor.operations.single"
         minSdkVersion MIN_SDK_VERSION as int
         targetSdkVersion TARGET_SDK_VERSION as int
         versionCode 2017091501

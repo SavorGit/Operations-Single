@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">运维端-单机版</string>
+    <string name="app_name">运维-单机版</string>
+    <string name="confirm_exit_app">在按一次退出运维端单机版</string>
 </resources>

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.savor.operations.single.activity.MainActivity">
-
-    <EditText
+    <TextView
+        android:padding="10dp"
+        android:background="@drawable/bg_edittext"
+        android:id="@+id/tv_search"
         android:hint="搜索酒楼"
         android:layout_marginTop="60dp"
         android:layout_marginLeft="20dp"
@@ -16,39 +18,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/tv_search"
         android:id="@+id/tv_hotel"
         android:text="酒楼名称："
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_hotel"
         android:id="@+id/tv_location"
         android:text="版位 ："
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <Button
-        android:id="@+id/btn_fix"
-        android:text="维修"
-        android:textSize="20sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
+        android:layout_alignParentBottom="true"
+        android:textStyle="bold"
+        android:textColor="@drawable/init_color_selector"
+        android:background="@drawable/sign_button_selector"
         android:id="@+id/btn_sign"
         android:text="签到"
-        android:textSize="20sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:textSize="16sp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:layout_above="@id/btn_sign"
+        android:textColor="@drawable/init_color_selector"
+        android:background="@drawable/sign_button_selector"
+        android:id="@+id/btn_fix"
+        android:text="维修"
+        android:textSize="16sp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+</RelativeLayout>
