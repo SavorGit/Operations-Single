@@ -1,5 +1,6 @@
 package com.savor.operations.single.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,10 @@ public class SearchHotelActivity extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_hotel);
+
+        getViews();
+        setViews();
+        setListeners();
     }
 
     @Override
@@ -79,9 +84,9 @@ public class SearchHotelActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onHotelClick(Hotel hotel) {
-//        Intent intent = new Intent(this,HotelPositionInfoAcitivty.class);
-//        intent.putExtra("hotel",hotel);
-//        startActivity(intent);
+        Intent intent = new Intent(this,HotelPositionInfoAcitivty.class);
+        intent.putExtra("hotel",hotel);
+        startActivity(intent);
     }
 
     @Override

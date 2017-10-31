@@ -1,15 +1,22 @@
 package com.savor.operations.single.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.os.Process;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.savor.operations.single.R;
 import com.savor.operations.single.utils.ActivitiesManager;
 
-public class MainActivity extends BaseActivity {
+/**
+ * 首页
+ */
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private long exitTime;
     private TextView mHotelNameTv;
@@ -20,6 +27,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getViews();
+        setViews();
+        setListeners();
     }
 
     @Override
@@ -36,7 +47,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void setListeners() {
-
+        mSearchTv.setOnClickListener(this);
     }
 
 
@@ -58,4 +69,12 @@ public class MainActivity extends BaseActivity {
         Process.killProcess(android.os.Process.myPid());
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_search:
+                Intent intent = new Intent(this,SearchHotelActivity.class);
+                startActivity(intent);
+        }
+    }
 }

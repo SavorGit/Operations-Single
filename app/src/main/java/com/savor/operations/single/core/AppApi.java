@@ -39,6 +39,10 @@ public class AppApi {
         POST_SEARCH_HOTEL_JSON,
         POST_UPGRADE_JSON,
         TEST_DOWNLOAD_JSON,
+        /**获取酒楼损坏配置表*/
+        POST_DAMAGE_CONFIG_JSON,
+        /**维修记录*/
+        POST_POSITION_LIST_JSON,
     }
 
     /**
@@ -52,6 +56,8 @@ public class AppApi {
             put(Action.TEST_GET_JSON, "https://www.baidu.com/");
             put(Action.POST_SEARCH_HOTEL_JSON, formatPhpUrl("Opclient/hotel/searchHotel"));
             put(Action.POST_UPGRADE_JSON, formatPhpUrl("Opclient/Version/index"));
+            put(Action.POST_DAMAGE_CONFIG_JSON, formatPhpUrl("Opclient/Box/getHotelBoxDamageConfig"));
+            put(Action.POST_POSITION_LIST_JSON, formatPhpUrl("Tasksubcontract/Hotel/getHotelVersionById"));
         }
     };
 
@@ -124,6 +130,28 @@ public class AppApi {
 //        params.put("type",type);
 //        params.put("userid",userid);
 //        new AppServiceOk(context, Action.POST_SUBMIT_DAMAGE_JSON, handler, params).post();
+    }
+
+    /**
+     * 酒店损坏配置表
+     * @param context 上下文
+     * @param handler 接口回调
+     */
+    public static void getDamageConfig(Context context, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<>();
+        new AppServiceOk(context, Action.POST_DAMAGE_CONFIG_JSON, handler, params).post();
+    }
+
+    /**
+     * 获取版位信息
+     * @param context 上下文
+     * @param handler 接口回调
+     * @param hotelId 酒店id
+     */
+    public static void getPositionList(Context context, String hotelId,ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<>();
+        params.put("hotel_id",hotelId);
+        new AppServiceOk(context, Action.POST_POSITION_LIST_JSON, handler, params).post();
     }
 
     // 超时（网络）异常

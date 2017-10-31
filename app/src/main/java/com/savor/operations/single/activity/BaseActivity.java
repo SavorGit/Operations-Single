@@ -28,9 +28,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ApiReque
         mSession = Session.get(getApplicationContext());
         mContext = this;
         ActivitiesManager.getInstance().pushActivity(this);
-        getViews();
-        setViews();
-        setListeners();
     }
 
 

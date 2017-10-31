@@ -8,4 +8,5 @@
     <color name="TextColorOrange">#fe9424</color>
     <color name="TextColorBlack">#FF000000</color>
     <color name="TextColorWhite">#FFFFFFFF</color>
+    <color name="color_red_light">#ff6a2f</color>
 </resources>

@@ -47,17 +47,18 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.SplashActivity"
-            android:theme="@style/NotitleTheme"
+        <activity
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
-            >
+            android:theme="@style/NotitleTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SearchHotelActivity"></activity>
+        <activity android:name=".activity.SearchHotelActivity" />
+        <activity android:name=".activity.HotelPositionInfoAcitivty"></activity>
     </application>
 
 </manifest>

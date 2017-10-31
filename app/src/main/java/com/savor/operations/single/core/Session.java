@@ -37,6 +37,7 @@ import com.common.api.utils.AppUtils;
 import com.common.api.utils.LogUtils;
 import com.common.api.utils.Pair;
 import com.common.api.utils.SaveFileData;
+import com.savor.operations.single.bean.DamageConfig;
 import com.savor.operations.single.utils.STIDUtil;
 
 import java.io.ByteArrayInputStream;
@@ -71,6 +72,7 @@ public class Session implements Serializable{
     private boolean isNeedGuide = true;
     private boolean isScanGuide = true;
     private static final String P_APP_DEVICEID = "pref.savor.deviceid";
+    private static final String P_APP_DAMAGE_CONFIG = "p_app_damage_config";
     private static final String P_APP_HOTELID = "pref.savor.hotelid";
     private static final String P_APP_PLATFORM_URL = "pref.savor.platformurl";
     private static final String P_APP_COLLECTIONS = "pref.savor.collections";
@@ -177,6 +179,7 @@ public class Session implements Serializable{
     private String channelId;
     private double latestLat;
     private double latestLng;
+    private DamageConfig damageConfig;
 
     private Session(Context context) {
 
@@ -279,6 +282,7 @@ public class Session implements Serializable{
 
 
     private void readSettings() {
+        damageConfig = (DamageConfig) getObj(P_APP_DAMAGE_CONFIG);
         deviceid = STIDUtil.getDeviceId(mContext);
         netType = mPreference.loadStringKey(P_APP_NET_TYPE, "");
         isNeedGuide = mPreference.loadBooleanKey(P_APP_IS_SHOW_GUIDE, isNeedGuide);
@@ -520,6 +524,15 @@ public class Session implements Serializable{
         writePreference(new Pair<String, Object>(P_APP_DEVICEID, deviceid));
     }
 
+
+    public void setDamageConfig(DamageConfig damageConfig) {
+        this.damageConfig = damageConfig;
+        setObj(P_APP_DAMAGE_CONFIG,damageConfig);
+    }
+
+    public DamageConfig getDamageConfig() {
+        return this.damageConfig;
+    }
 
     /**
      * 返回设备相关信息

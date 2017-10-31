@@ -22,6 +22,8 @@ import com.common.api.utils.DesUtils;
 import com.common.api.utils.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.savor.operations.single.bean.DamageConfig;
+import com.savor.operations.single.bean.PositionListInfo;
 import com.savor.operations.single.bean.HotelListResponse;
 
 import org.json.JSONArray;
@@ -224,7 +226,12 @@ public class ApiResponseFactory {
             case POST_SEARCH_HOTEL_JSON:
                 result = gson.fromJson(info, HotelListResponse.class);
                 break;
-
+            case POST_DAMAGE_CONFIG_JSON:
+                result = gson.fromJson(info, DamageConfig.class);
+                break;
+            case POST_POSITION_LIST_JSON:
+                result = gson.fromJson(info, PositionListInfo.class);
+                break;
             default:
                 break;
         }
