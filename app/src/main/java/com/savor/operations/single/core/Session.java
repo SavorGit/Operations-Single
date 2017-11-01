@@ -571,7 +571,7 @@ public class Session implements Serializable{
         buffer.append(";language=");
         buffer.append("");
         buffer.append(";location=");
-        buffer.append(latestLng + "," + latestLat);
+        buffer.append( latestLat+ "," + latestLng);
         return buffer.toString();
     }
     //        buffer.append(";imei=");

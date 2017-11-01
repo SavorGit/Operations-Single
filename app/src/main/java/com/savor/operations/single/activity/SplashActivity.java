@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.common.api.utils.LogUtils;
 import com.savor.operations.single.R;
+import com.savor.operations.single.SavorApplication;
 import com.savor.operations.single.bean.LoginResponse;
 import com.savor.operations.single.utils.LocationService;
 
@@ -46,10 +48,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void startLocation() {
-        if(locationService==null) {
-            locationService = new LocationService(this);
-            locationService.registerListener(mLocationListener);
-        }
+        locationService = ((SavorApplication)getApplication()).locationService;
+        locationService.registerListener(mLocationListener);
         locationService.start();
     }
 
@@ -78,21 +78,32 @@ public class SplashActivity extends BaseActivity {
      * 点击首页底部悬浮窗进行定位结果回调
      *
      */
-    private BDLocationListener mLocationListener = new BDLocationListener() {
-
+    private BDAbstractLocationListener mLocationListener = new BDAbstractLocationListener() {
         @Override
-        public void onReceiveLocation(BDLocation location) {
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                LogUtils.d("operations:location lat="+latitude+",lng="+longitude);
+        public void onReceiveLocation(BDLocation bdLocation) {
+            if (null != bdLocation && bdLocation.getLocType() != BDLocation.TypeServerError) {
+                double latitude = bdLocation.getLatitude();
+                double longitude = bdLocation.getLongitude();
                 mSession.setLatestLat(latitude);
                 mSession.setLatestLng(longitude);
+                locationService.unregisterListener(mLocationListener); //注销掉监听
+                locationService.stop(); //停止定位服务
             }
         }
 
-        public void onConnectHotSpotMessage(String s, int i){
-            LogUtils.d("savor:location onconnect = "+s);
-        }
+//        @Override
+//        public void onReceiveLocation(BDLocation location) {
+//            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+//                double latitude = location.getLatitude();
+//                double longitude = location.getLongitude();
+//                LogUtils.d("operations:location lat="+latitude+",lng="+longitude);
+//                mSession.setLatestLat(latitude);
+//                mSession.setLatestLng(longitude);
+//            }
+//        }
+//
+//        public void onConnectHotSpotMessage(String s, int i){
+//            LogUtils.d("savor:location onconnect = "+s);
+//        }
     };
 }

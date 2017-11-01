@@ -1,16 +1,13 @@
 package com.savor.operations.single;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.common.api.utils.AppUtils;
-import com.common.api.utils.LogUtils;
-import com.google.gson.Gson;
 import com.savor.operations.single.core.Session;
+import com.savor.operations.single.utils.LocationService;
 
 import java.io.File;
-import java.util.Map;
 
 /**
  * 全局application
@@ -21,6 +18,7 @@ public class SavorApplication extends Application {
 
     private static SavorApplication mInstance;
     public String imagePath;
+    public LocationService locationService;
 
 
     public static SavorApplication getInstance() {
@@ -36,6 +34,7 @@ public class SavorApplication extends Application {
         Session.get(this);
         mInstance = this;
         initCacheFile();
+        locationService = new LocationService(getApplicationContext());
     }
 
     private void initCacheFile() {

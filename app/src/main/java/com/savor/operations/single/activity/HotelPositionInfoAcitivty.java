@@ -147,10 +147,6 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
             case POST_SUBMIT_DAMAGE_JSON:
                 if(currentOType == TYPE_FIX) {
                     ShowMessage.showToast(this,"提交成功");
-                    if(!TextUtils.isEmpty(cacheImagePath)) {
-                        File file = new File(cacheImagePath);
-                        file.delete();
-                    }
                     fixDialog.loadFinish();
                     fixDialog.dismiss();
                 }else {
@@ -191,10 +187,10 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
         switch (method) {
             case POST_SUBMIT_DAMAGE_JSON:
                 if(currentOType == TYPE_FIX) {
-                    if(!TextUtils.isEmpty(cacheImagePath)) {
-                        File file = new File(cacheImagePath);
-                        file.delete();
-                    }
+//                    if(!TextUtils.isEmpty(cacheImagePath)) {
+//                        File file = new File(cacheImagePath);
+//                        file.delete();
+//                    }
                     ShowMessage.showToast(this,"提交失败");
                     fixDialog.loadFinish();
                     fixDialog.dismiss();

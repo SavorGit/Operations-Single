@@ -137,7 +137,7 @@ public class AppApi {
         params.put("remark",remark);
         params.put("repair_img",repair_img);
         params.put("repair_type",repair_type);
-        params.put("state",state);
+//        params.put("state",state);
         params.put("srtype",srtype);
         params.put("userid",userid);
         new AppServiceOk(context, Action.POST_SUBMIT_DAMAGE_JSON, handler, params).post();

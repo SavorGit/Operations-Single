@@ -137,6 +137,8 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
             dir.mkdirs();
         }
 
+        FileUtils.recursionDeleteFile(dir);
+
         String box_id = boxInfo.getBid();
         long timeMillis = System.currentTimeMillis();
         String key = box_id+"_"+timeMillis+".jpg";
@@ -150,22 +152,16 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_upload:
-                clearCacheImage();
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 mContext.startActivityForResult(intent, REQUEST_CODE_IMAGE);
                 break;
             case R.id.tv_cancel:
-                clearCacheImage();
                 dismiss();
                 break;
             case R.id.tv_submit:
                 if(mOnSubmitListener!=null) {
                     String comment = mCommentEt.getText().toString();
-                    if(currentFixSate == FixDialog.FixState.UNSELECTED) {
-                        ShowMessage.showToast(mContext,"请选择修复状态已解决或未解决");
-                        return;
-                    }
                     if(TextUtils.isEmpty(comment)&&selectedDamages.size()==0) {
                         ShowMessage.showToast(mContext,"请选择维修记录或填写备注");
                         return;
@@ -230,12 +226,6 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
                 }
                 alertDialog.show();
 
-        }
-    }
-
-    private void clearCacheImage() {
-        if(!TextUtils.isEmpty(copyPath)) {
-            new File(copyPath).delete();
         }
     }
 

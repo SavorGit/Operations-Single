@@ -126,6 +126,26 @@ public class FileUtils<T> {
         }
         return true;
     }
+
+
+    public static void recursionDeleteFile(File file){
+        if(file.isFile()){
+            file.delete();
+            return;
+        }
+        if(file.isDirectory()){
+            File[] childFile = file.listFiles();
+            if(childFile == null || childFile.length == 0){
+//                file.delete();
+                return;
+            }
+            for(File f : childFile){
+                recursionDeleteFile(f);
+            }
+//            file.delete();
+        }
+    }
+
     public static boolean copyFile(File file, String copyToPath)  {
         File copyFile = new File(copyToPath);
         if(!copyFile.exists()) {
