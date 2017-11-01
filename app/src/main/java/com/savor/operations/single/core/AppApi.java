@@ -1,6 +1,7 @@
 package com.savor.operations.single.core;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.common.api.utils.AppUtils;
 
@@ -63,7 +64,7 @@ public class AppApi {
             put(Action.TEST_GET_JSON, "https://www.baidu.com/");
             put(Action.POST_SEARCH_HOTEL_JSON, formatPhpUrl("Tasksubcontract/hotel/searchHotel"));
             put(Action.POST_UPGRADE_JSON, formatPhpUrl("Tasksubcontract/Version/index"));
-            put(Action.POST_DAMAGE_CONFIG_JSON, formatPhpUrl("Opclient/Box/getHotelBoxDamageConfig"));
+            put(Action.POST_DAMAGE_CONFIG_JSON, formatPhpUrl("Tasksubcontract/Box/getHotelBoxDamageConfig"));
             put(Action.POST_POSITION_LIST_JSON, formatPhpUrl("Tasksubcontract/Hotel/getHotelVersionById"));
             put(Action.POST_HOTEL_MACINFO_JSON, formatPhpUrl("Tasksubcontract/Hotel/getHotelMacInfoById"));
             put(Action.POST_SUBMIT_DAMAGE_JSON, formatPhpUrl("Tasksubcontract/Box/InsertBoxDamage"));
@@ -130,14 +131,16 @@ public class AppApi {
      */
     public static void submitDamage(Context context, String bid, String hotel_id,
                                     String remark, String repair_img,String repair_type,String srtype,String state,
-                                    String userid, ApiRequestListener handler) {
+                                    String userid, String current_location,ApiRequestListener handler) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("bid",bid);
         params.put("hotel_id",hotel_id);
         params.put("remark",remark);
         params.put("repair_img",repair_img);
         params.put("repair_type",repair_type);
-//        params.put("state",state);
+        if(!TextUtils.isEmpty(current_location)) {
+            params.put("current_location",current_location);
+        }
         params.put("srtype",srtype);
         params.put("userid",userid);
         new AppServiceOk(context, Action.POST_SUBMIT_DAMAGE_JSON, handler, params).post();

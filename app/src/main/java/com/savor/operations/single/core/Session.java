@@ -185,6 +185,7 @@ public class Session implements Serializable{
     private DamageConfig damageConfig;
     private LoginResponse loginResponse;
     private boolean isApkDownloading;
+    private String currentLocation;
 
     private Session(Context context) {
 
@@ -620,5 +621,13 @@ public class Session implements Serializable{
 
     public void setApkDownloading(boolean isApkDownloading) {
         this.isApkDownloading = isApkDownloading;
+    }
+
+    public void setCurrentLocation(String currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public String getCurrentLocation() {
+        return currentLocation;
     }
 }

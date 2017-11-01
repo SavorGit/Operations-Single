@@ -88,6 +88,7 @@ public class PositionListInfo implements Serializable {
              */
 
             private String rname;
+            private String current_location;
             private String boxname;
             private String bid;
             private String mac;
@@ -98,6 +99,7 @@ public class PositionListInfo implements Serializable {
             public String toString() {
                 return "BoxInfoBean{" +
                         "rname='" + rname + '\'' +
+                        ", current_location='" + current_location + '\'' +
                         ", boxname='" + boxname + '\'' +
                         ", bid='" + bid + '\'' +
                         ", mac='" + mac + '\'' +
@@ -114,10 +116,11 @@ public class PositionListInfo implements Serializable {
                 BoxInfoBean that = (BoxInfoBean) o;
 
                 if (rname != null ? !rname.equals(that.rname) : that.rname != null) return false;
+                if (current_location != null ? !current_location.equals(that.current_location) : that.current_location != null)
+                    return false;
                 if (boxname != null ? !boxname.equals(that.boxname) : that.boxname != null)
                     return false;
-                if (bid != null ? !bid.equals(that.bid) : that.bid != null)
-                    return false;
+                if (bid != null ? !bid.equals(that.bid) : that.bid != null) return false;
                 if (mac != null ? !mac.equals(that.mac) : that.mac != null) return false;
                 if (srtype != null ? !srtype.equals(that.srtype) : that.srtype != null)
                     return false;
@@ -127,6 +130,7 @@ public class PositionListInfo implements Serializable {
             @Override
             public int hashCode() {
                 int result = rname != null ? rname.hashCode() : 0;
+                result = 31 * result + (current_location != null ? current_location.hashCode() : 0);
                 result = 31 * result + (boxname != null ? boxname.hashCode() : 0);
                 result = 31 * result + (bid != null ? bid.hashCode() : 0);
                 result = 31 * result + (mac != null ? mac.hashCode() : 0);
@@ -141,6 +145,14 @@ public class PositionListInfo implements Serializable {
 
             public void setRname(String rname) {
                 this.rname = rname;
+            }
+
+            public String getCurrent_location() {
+                return current_location;
+            }
+
+            public void setCurrent_location(String current_location) {
+                this.current_location = current_location;
             }
 
             public String getBoxname() {

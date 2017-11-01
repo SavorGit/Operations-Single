@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -61,6 +62,7 @@ public class HotelPositionAdapter extends BaseAdapter {
             holder.tv_last_optime = convertView.findViewById(R.id.tv_last_optime);
             holder.tv_box_info = convertView.findViewById(R.id.tv_box_info);
             holder.tv_last_operation = convertView.findViewById(R.id.tv_last_operation);
+            holder.tv_location = convertView.findViewById(R.id.tv_location);
             holder.divider = convertView.findViewById(R.id.divider);
             holder.btn_fix = convertView.findViewById(R.id.btn_fix);
             holder.btn_sign = convertView.findViewById(R.id.btn_sign);
@@ -82,6 +84,11 @@ public class HotelPositionAdapter extends BaseAdapter {
             holder.tv_last_optime.setText("最后操作时间："+last_ctime);
         }else {
             holder.tv_last_optime.setText("最后操作时间：无");
+        }
+
+        String current_location = boxInfoBean.getCurrent_location();
+        if(!TextUtils.isEmpty(current_location)) {
+            holder.tv_location.setText("最后操作位置："+current_location);
         }
 
         holder.btn_fix.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +117,7 @@ public class HotelPositionAdapter extends BaseAdapter {
         public TextView tv_box_info;
         public TextView tv_last_operation;
         public TextView tv_last_optime;
+        public TextView tv_location;
         public Button btn_fix;
         public Button btn_sign;
     }

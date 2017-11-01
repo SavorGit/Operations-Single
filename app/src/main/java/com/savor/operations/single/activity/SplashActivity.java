@@ -84,10 +84,12 @@ public class SplashActivity extends BaseActivity {
             if (null != bdLocation && bdLocation.getLocType() != BDLocation.TypeServerError) {
                 double latitude = bdLocation.getLatitude();
                 double longitude = bdLocation.getLongitude();
+                String addrStr = bdLocation.getAddrStr();
+                String locationDescribe = bdLocation.getLocationDescribe();
+                String currentLocation = addrStr+" "+locationDescribe;
                 mSession.setLatestLat(latitude);
                 mSession.setLatestLng(longitude);
-                locationService.unregisterListener(mLocationListener); //注销掉监听
-                locationService.stop(); //停止定位服务
+                mSession.setCurrentLocation(currentLocation);
             }
         }
 

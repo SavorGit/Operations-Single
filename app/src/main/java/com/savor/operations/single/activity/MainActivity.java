@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Process;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -48,6 +50,7 @@ import static com.savor.operations.single.core.AppApi.Action.POST_UPGRADE_JSON;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private static final int NOTIFY_DOWNLOAD_FILE = 10001;
+    private static final int UPDATE_LOCATION = 10002;
     private long exitTime;
     private TextView mSearchTv;
     private FixBean fixBean;
@@ -60,6 +63,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Notification notif;
     private LocationService locationService;
     private TextView mLocationTv;
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case UPDATE_LOCATION:
+                    String currentLocation = mSession.getCurrentLocation();
+                    if(!TextUtils.isEmpty(currentLocation)) {
+                        mLocationTv.setText("当前位置："+currentLocation);
+                    }else {
+                        mLocationTv.setText("当前位置：获取失败");
+                    }
+                    startLocationTimer();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +90,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setViews();
         setListeners();
         upgrade();
+        startLocationTimer();
+    }
 
+    private void startLocationTimer() {
+        mHandler.sendEmptyMessageDelayed(UPDATE_LOCATION,1000*10);
     }
 
     private void upgrade(){
@@ -92,6 +116,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if(loginResponse!=null) {
             String nickname = loginResponse.getNickname();
             mUserInfo.setText("当前登录用户："+nickname);
+        }
+
+        String currentLocation = mSession.getCurrentLocation();
+        if(!TextUtils.isEmpty(currentLocation)) {
+            mLocationTv.setText("当前位置："+currentLocation);
         }
     }
 
@@ -304,60 +333,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     };
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        startLocation();
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeMessages(UPDATE_LOCATION);
+        mHandler.removeCallbacksAndMessages(null);
     }
-
-
-    @Override
-    protected void onStop() {
-        locationService.unregisterListener(mLocationListener); //注销掉监听
-        locationService.stop(); //停止定位服务
-        super.onStop();
-
-    }
-
-    private void startLocation() {
-        locationService = ((SavorApplication)getApplication()).locationService;
-        locationService.registerListener(mLocationListener);
-        locationService.start();
-    }
-
-    /*****
-     *
-     * 点击首页底部悬浮窗进行定位结果回调
-     *
-     */
-    private BDAbstractLocationListener mLocationListener = new BDAbstractLocationListener() {
-        @Override
-        public void onReceiveLocation(BDLocation bdLocation) {
-            if (null != bdLocation && bdLocation.getLocType() != BDLocation.TypeServerError) {
-                double latitude = bdLocation.getLatitude();
-                double longitude = bdLocation.getLongitude();
-                String addr = bdLocation.getAddrStr();    //获取详细地址信息
-                String desc = bdLocation.getLocationDescribe();    //获取国家
-                mSession.setLatestLat(latitude);
-                mSession.setLatestLng(longitude);
-                if(!TextUtils.isEmpty(addr)&&!TextUtils.isEmpty(desc)) {
-                    mLocationTv.setText("当前位置："+addr+" "+desc);
-                }
-            }
-        }
-
-//        @Override
-//        public void onReceiveLocation(BDLocation location) {
-//            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-//                double latitude = location.getLatitude();
-//                double longitude = location.getLongitude();
-//                LogUtils.d("operations:location lat="+latitude+",lng="+longitude);
-//                mSession.setLatestLat(latitude);
-//                mSession.setLatestLng(longitude);
-//            }
-//        }
-//
-//        public void onConnectHotSpotMessage(String s, int i){
-//            LogUtils.d("savor:location onconnect = "+s);
-//        }
-    };
 }

@@ -276,7 +276,7 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
         }
         AppApi.submitDamage(HotelPositionInfoAcitivty.this,boxInfoBean.getBid(),hotel.getId(),
                 comment,url,sb.toString(),"2",isResolve== FixDialog.FixState.RESOLVED?"1":"2",
-                mSession.getLoginResponse().getUserid(),HotelPositionInfoAcitivty.this);
+                mSession.getLoginResponse().getUserid(),mSession.getCurrentLocation(),HotelPositionInfoAcitivty.this);
     }
 
     @Override
@@ -284,7 +284,7 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
         currentOType = TYPE_SIGN;
         AppApi.submitDamage(HotelPositionInfoAcitivty.this,boxInfoBean.getBid(),mHotel.getId(),
                 "","","","1","",
-                mSession.getLoginResponse().getUserid(),HotelPositionInfoAcitivty.this);
+                mSession.getLoginResponse().getUserid(),mSession.getCurrentLocation(),HotelPositionInfoAcitivty.this);
     }
 
     @Override
