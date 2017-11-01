@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,16 +14,19 @@ import android.widget.TextView;
 import com.savor.operations.single.R;
 import com.savor.operations.single.adapter.HotelPositionAdapter;
 import com.savor.operations.single.bean.DamageConfig;
+import com.savor.operations.single.bean.FixBean;
 import com.savor.operations.single.bean.PositionListInfo;
 import com.savor.operations.single.bean.Hotel;
 import com.savor.operations.single.core.AppApi;
+import com.savor.operations.single.widget.CommonDialog;
+import com.savor.operations.single.widget.FixDialog;
 
 import java.util.List;
 
 /**
  * 酒楼版位信息
  */
-public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnClickListener {
+public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnClickListener, HotelPositionAdapter.OnFixBtnClickListener, HotelPositionAdapter.OnSignBtnClickListener {
 
     private ListView mPostionListView;
     private ImageView mBackBtn;
@@ -39,6 +43,9 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
     private PositionListInfo positionListInfo;
     private TextView mFixHintTv;
     private RecyclerView mSpHistoryRlv;
+    private FixBean fixBean;
+    public static int RESULT_CODE_SELECT = 100;
+    public static int REQUEST_CODE_SELECT = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,8 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
 
     @Override
     public void getViews() {
+        fixBean = new FixBean();
+
         View headerView = View.inflate(this,R.layout.header_view_position_list,null);
         mPositionDesc = (TextView) headerView.findViewById(R.id.tv_position_desc);
         mBackBtn = (ImageView) findViewById(R.id.iv_left);
@@ -99,6 +108,9 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
     @Override
     public void setListeners() {
         mTitleTv.setOnClickListener(this);
+        mHotelPositionAdapter.setOnFixBtnClickListener(this);
+        mHotelPositionAdapter.setOnSignBtnClickListener(this);
+//        mPostionListView.setOnItemClickListener(this);
     }
 
     @Override
@@ -140,13 +152,28 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_center:
-//                Intent intent = new Intent(this,HotelMacInfoActivity.class);
-//                intent.putExtra("hotel",mHotel);
-//                startActivity(intent);
+                Intent intent = new Intent(this,HotelMacInfoActivity.class);
+                intent.putExtra("hotel",mHotel);
+                startActivity(intent);
                 break;
             case R.id.iv_left:
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onFixBtnClick(PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean) {
+        new FixDialog(this, new FixDialog.OnSubmitBtnClickListener() {
+            @Override
+            public void onSubmitClick(FixDialog.OperationType type, PositionListInfo fixHistoryResponse, FixDialog.FixState isResolve, List<String> damageDesc, String comment, Hotel hotel) {
+
+            }
+        }, FixDialog.OperationType.TYPE_BOX,positionListInfo,mSession.getDamageConfig(),mHotel).show();
+    }
+
+    @Override
+    public void onSignBtnClick(PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean) {
+
     }
 }

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class HotelPositionAdapter extends BaseAdapter {
     private final Context mContext;
     private List<PositionListInfo.PositionInfo.BoxInfoBean> data;
     private OnFixBtnClickListener mOnFixBtnClickListener;
+    private OnSignBtnClickListener mOnSignBtnClickListener;
 
     public HotelPositionAdapter(Context context) {
         this.mContext = context;
@@ -60,6 +62,8 @@ public class HotelPositionAdapter extends BaseAdapter {
             holder.tv_box_info = convertView.findViewById(R.id.tv_box_info);
             holder.tv_last_operation = convertView.findViewById(R.id.tv_last_operation);
             holder.divider = convertView.findViewById(R.id.divider);
+            holder.btn_fix = convertView.findViewById(R.id.btn_fix);
+            holder.btn_sign = convertView.findViewById(R.id.btn_sign);
             convertView.setTag(holder);
         }else {
             holder = (ViewHolder) convertView.getTag();
@@ -80,6 +84,24 @@ public class HotelPositionAdapter extends BaseAdapter {
             holder.tv_last_optime.setText("最后操作时间：无");
         }
 
+        holder.btn_fix.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnFixBtnClickListener!=null) {
+                    mOnFixBtnClickListener.onFixBtnClick(boxInfoBean);
+                }
+            }
+        });
+
+        holder.btn_sign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mOnSignBtnClickListener!=null) {
+                    mOnSignBtnClickListener.onSignBtnClick(boxInfoBean);
+                }
+            }
+        });
+
         return convertView;
     }
 
@@ -88,14 +110,23 @@ public class HotelPositionAdapter extends BaseAdapter {
         public TextView tv_box_info;
         public TextView tv_last_operation;
         public TextView tv_last_optime;
+        public Button btn_fix;
+        public Button btn_sign;
+    }
+
+    public void setOnFixBtnClickListener(OnFixBtnClickListener onFixBtnClickListener) {
+        this.mOnFixBtnClickListener = onFixBtnClickListener;
+    }
+
+    public void setOnSignBtnClickListener(OnSignBtnClickListener onSignBtnClickListener) {
+        this.mOnSignBtnClickListener = onSignBtnClickListener;
     }
 
     public interface OnFixBtnClickListener {
-        void onFixBtnClick(int position, PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean);
+        void onFixBtnClick(PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean);
     }
 
-    public void setOnFixBtnClickListener(OnFixBtnClickListener listener) {
-        this.mOnFixBtnClickListener = listener;
+    public interface OnSignBtnClickListener {
+        void onSignBtnClick(PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean);
     }
-
 }

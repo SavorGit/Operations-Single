@@ -9,4 +9,9 @@
     <color name="TextColorBlack">#FF000000</color>
     <color name="TextColorWhite">#FFFFFFFF</color>
     <color name="color_red_light">#ff6a2f</color>
+
+    <color name="color_text_list_item">#f6f2ed</color>
+
+    <color name="color_main">#922c3e</color>
+    <color name="color_text_black">#434343</color>
 </resources>
