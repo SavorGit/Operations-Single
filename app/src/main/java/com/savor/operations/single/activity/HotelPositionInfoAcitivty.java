@@ -6,16 +6,21 @@ import android.database.Cursor;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.common.api.utils.FileUtils;
@@ -45,6 +50,8 @@ import static com.savor.operations.single.widget.FixDialog.REQUEST_CODE_IMAGE;
  */
 public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnClickListener, HotelPositionAdapter.OnFixBtnClickListener, HotelPositionAdapter.OnSignBtnClickListener {
 
+    private static final int TYPE_FIX = 0x1;
+    private static final int TYPE_SIGN = 0x2;
     private ListView mPostionListView;
     private ImageView mBackBtn;
     private TextView mTitleTv;
@@ -64,6 +71,9 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
     public static int RESULT_CODE_SELECT = 100;
     public static int REQUEST_CODE_SELECT = 101;
     private FixDialog fixDialog;
+    private int currentOType;
+    private String cacheImagePath;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +145,17 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
     public void onSuccess(AppApi.Action method, Object obj) {
         switch (method) {
             case POST_SUBMIT_DAMAGE_JSON:
-                ShowMessage.showToast(this,"提交成功");
+                if(currentOType == TYPE_FIX) {
+                    ShowMessage.showToast(this,"提交成功");
+                    if(!TextUtils.isEmpty(cacheImagePath)) {
+                        File file = new File(cacheImagePath);
+                        file.delete();
+                    }
+                    fixDialog.loadFinish();
+                    fixDialog.dismiss();
+                }else {
+                    ShowMessage.showToast(this,"签到成功");
+                }
                 getData();
                 break;
             case POST_POSITION_LIST_JSON:
@@ -170,7 +190,17 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
         super.onError(method, obj);
         switch (method) {
             case POST_SUBMIT_DAMAGE_JSON:
-                ShowMessage.showToast(this,"提交失败");
+                if(currentOType == TYPE_FIX) {
+                    if(!TextUtils.isEmpty(cacheImagePath)) {
+                        File file = new File(cacheImagePath);
+                        file.delete();
+                    }
+                    ShowMessage.showToast(this,"提交失败");
+                    fixDialog.loadFinish();
+                    fixDialog.dismiss();
+                }else {
+                    ShowMessage.showToast(this,"签到失败");
+                }
                 break;
         }
     }
@@ -191,41 +221,74 @@ public class HotelPositionInfoAcitivty extends BaseActivity implements  View.OnC
 
     @Override
     public void onFixBtnClick(final PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean) {
+        currentOType = TYPE_FIX;
         fixDialog = new FixDialog(this, new FixDialog.OnSubmitBtnClickListener() {
             @Override
-            public void onSubmitClick(FixDialog.OperationType type, PositionListInfo.PositionInfo.BoxInfoBean fixHistoryResponse, FixDialog.FixState isResolve, List<String> damageDesc, String comment, Hotel hotel,String imagePath) {
-                OSSClient ossClient = OSSClientUtil.getInstance().getOSSClient(HotelPositionInfoAcitivty.this);
-                int areaId = 1;
+            public void onSubmitClick(FixDialog.OperationType type, PositionListInfo.PositionInfo.BoxInfoBean fixHistoryResponse, final FixDialog.FixState isResolve, final List<String> damageDesc, final String comment, final Hotel hotel, String imagePath) {
+                fixDialog.startLoading();
+                final OSSClient ossClient = OSSClientUtil.getInstance().getOSSClient(HotelPositionInfoAcitivty.this);
+                cacheImagePath = imagePath;
                 File file = new File(imagePath);
                 Date date = new Date(System.currentTimeMillis());
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
                 String dateStr = simpleDateFormat.format(date);
-                // 构造上传请求
-                PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME, "log/resource/standalone/moble"+dateStr+"/"+file.getName(), imagePath);
-                try {
-                    PutObjectResult putResult = ossClient.putObject(put);
-                    String url = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, "log/resource/standalone/moble" + dateStr + "/" + file.getName());
 
-                    StringBuilder sb = new StringBuilder();
-                    for(int i = 0;i<damageDesc.size();i++) {
-                        if(damageDesc.size() == 1 || i == damageDesc.size()-1) {
-                            sb.append(damageDesc.get(i));
-                        }else {
-                            sb.append(damageDesc.get(i)+",");
+                final String objectKey = "log/resource/standalone/mobile/"+dateStr+"/"+file.getName();
+                // 构造上传请求
+                PutObjectRequest put = new PutObjectRequest(ConstantValues.BUCKET_NAME,objectKey , imagePath);
+                try {
+                    ossClient.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+                        @Override
+                        public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    submit(isResolve, damageDesc, comment, hotel, ossClient, objectKey, boxInfoBean);
+                                }
+                            });
+
                         }
-                    }
-                    AppApi.submitDamage(HotelPositionInfoAcitivty.this,boxInfoBean.getBid(),hotel.getId(),
-                            comment,url,sb.toString(),"2",isResolve== FixDialog.FixState.RESOLVED?"1":"2",
-                            mSession.getLoginResponse().getUserid(),HotelPositionInfoAcitivty.this);
+
+                        @Override
+                        public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ShowMessage.showToast(HotelPositionInfoAcitivty.this,"上传图片失败");
+                                    fixDialog.loadFinish();
+                                }
+                            });
+                        }
+                    });
+
                 }catch (Exception e){}
             }
         }, FixDialog.OperationType.TYPE_BOX,boxInfoBean,mSession.getDamageConfig(),mHotel);
         fixDialog.show();
     }
 
+    private void submit(FixDialog.FixState isResolve, List<String> damageDesc, String comment, Hotel hotel, OSSClient ossClient, String objectKey, PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean) {
+        String url = ossClient.presignPublicObjectURL(ConstantValues.BUCKET_NAME, objectKey);
+
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0;i<damageDesc.size();i++) {
+            if(damageDesc.size() == 1 || i == damageDesc.size()-1) {
+                sb.append(damageDesc.get(i));
+            }else {
+                sb.append(damageDesc.get(i)+",");
+            }
+        }
+        AppApi.submitDamage(HotelPositionInfoAcitivty.this,boxInfoBean.getBid(),hotel.getId(),
+                comment,url,sb.toString(),"2",isResolve== FixDialog.FixState.RESOLVED?"1":"2",
+                mSession.getLoginResponse().getUserid(),HotelPositionInfoAcitivty.this);
+    }
+
     @Override
     public void onSignBtnClick(PositionListInfo.PositionInfo.BoxInfoBean boxInfoBean) {
-
+        currentOType = TYPE_SIGN;
+        AppApi.submitDamage(HotelPositionInfoAcitivty.this,boxInfoBean.getBid(),mHotel.getId(),
+                "","","","1","",
+                mSession.getLoginResponse().getUserid(),HotelPositionInfoAcitivty.this);
     }
 
     @Override

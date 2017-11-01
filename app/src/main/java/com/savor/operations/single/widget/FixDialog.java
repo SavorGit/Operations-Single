@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,6 +58,15 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
     private Button mUploadBtn;
     private ImageView mImageIv;
     private String copyPath;
+    private ProgressBar loadingPb;
+
+    public void startLoading() {
+        loadingPb.setVisibility(View.VISIBLE);
+    }
+
+    public void loadFinish() {
+        loadingPb.setVisibility(View.GONE);
+    }
 
     public enum FixState {
         /**为选择*/
@@ -95,14 +105,15 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
     }
 
     private void getViews() {
-        mResovleRg = (RadioGroup) findViewById(R.id.rg_resovle);
-        mCommentEt = (EditText) findViewById(R.id.et_desc);
-        mDamageLayout = (RelativeLayout) findViewById(R.id.rl_damage_layout);
-        mCancelBtn = (TextView) findViewById(R.id.tv_cancel);
-        mSubmitBtn = (TextView) findViewById(R.id.tv_submit);
-        mSelectDescTv = (TextView)findViewById(R.id.tv_select_desc);
+        mResovleRg = findViewById(R.id.rg_resovle);
+        mCommentEt = findViewById(R.id.et_desc);
+        mDamageLayout = findViewById(R.id.rl_damage_layout);
+        mCancelBtn =  findViewById(R.id.tv_cancel);
+        mSubmitBtn =  findViewById(R.id.tv_submit);
+        mSelectDescTv = findViewById(R.id.tv_select_desc);
         mUploadBtn = findViewById(R.id.btn_upload);
         mImageIv = findViewById(R.id.iv_image);
+        loadingPb = findViewById(R.id.pb_loading);
     }
 
     private void setViews() {
@@ -129,7 +140,7 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
         String box_id = boxInfo.getBid();
         long timeMillis = System.currentTimeMillis();
         String key = box_id+"_"+timeMillis+".jpg";
-        copyPath = dir.getAbsolutePath()+key;
+        copyPath = dir.getAbsolutePath()+File.separator+key;
 
         File sFile = new File(url);
         FileUtils.copyFile(sFile, copyPath);
@@ -139,11 +150,13 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_upload:
+                clearCacheImage();
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 mContext.startActivityForResult(intent, REQUEST_CODE_IMAGE);
                 break;
             case R.id.tv_cancel:
+                clearCacheImage();
                 dismiss();
                 break;
             case R.id.tv_submit:
@@ -163,7 +176,7 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
                     }
                     mOnSubmitListener.onSubmitClick(type, boxInfo,currentFixSate,selectedDamages,comment,mHotel,copyPath);
                 }
-                dismiss();
+//                dismiss();
                 break;
             case R.id.rl_damage_layout:
                 if(alertDialog == null) {
@@ -217,6 +230,12 @@ public class FixDialog extends Dialog implements View.OnClickListener, RadioGrou
                 }
                 alertDialog.show();
 
+        }
+    }
+
+    private void clearCacheImage() {
+        if(!TextUtils.isEmpty(copyPath)) {
+            new File(copyPath).delete();
         }
     }
 
