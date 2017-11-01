@@ -49,6 +49,7 @@ public class AppApi {
         POST_SUBMIT_DAMAGE_JSON,
         /**登录*/
         POST_LOGIN_JSON,
+
     }
 
     /**
@@ -60,8 +61,8 @@ public class AppApi {
         {
             put(Action.TEST_GET_JSON, "https://www.baidu.com/");
             put(Action.TEST_GET_JSON, "https://www.baidu.com/");
-            put(Action.POST_SEARCH_HOTEL_JSON, formatPhpUrl("Opclient/hotel/searchHotel"));
-            put(Action.POST_UPGRADE_JSON, formatPhpUrl("Opclient/Version/index"));
+            put(Action.POST_SEARCH_HOTEL_JSON, formatPhpUrl("Tasksubcontract/hotel/searchHotel"));
+            put(Action.POST_UPGRADE_JSON, formatPhpUrl("Tasksubcontract/Version/index"));
             put(Action.POST_DAMAGE_CONFIG_JSON, formatPhpUrl("Opclient/Box/getHotelBoxDamageConfig"));
             put(Action.POST_POSITION_LIST_JSON, formatPhpUrl("Tasksubcontract/Hotel/getHotelVersionById"));
             put(Action.POST_HOTEL_MACINFO_JSON, formatPhpUrl("Tasksubcontract/Hotel/getHotelMacInfoById"));

@@ -22,11 +22,13 @@ import com.common.api.utils.DesUtils;
 import com.common.api.utils.LogUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.savor.operations.single.bean.DamageConfig;
 import com.savor.operations.single.bean.HotelMacInfo;
 import com.savor.operations.single.bean.LoginResponse;
 import com.savor.operations.single.bean.PositionListInfo;
 import com.savor.operations.single.bean.HotelListResponse;
+import com.savor.operations.single.bean.UpgradeInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -242,6 +244,10 @@ public class ApiResponseFactory {
                 break;
             case POST_LOGIN_JSON:
                 result = new Gson().fromJson(info, LoginResponse.class);
+                break;
+            case POST_UPGRADE_JSON:
+                result = gson.fromJson(info, new TypeToken<UpgradeInfo>() {
+                }.getType());
                 break;
             default:
                 break;

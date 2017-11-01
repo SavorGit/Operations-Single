@@ -184,6 +184,7 @@ public class Session implements Serializable{
     private double latestLng;
     private DamageConfig damageConfig;
     private LoginResponse loginResponse;
+    private boolean isApkDownloading;
 
     private Session(Context context) {
 
@@ -609,6 +610,15 @@ public class Session implements Serializable{
     }
 
     public LoginResponse getLoginResponse() {
+
         return this.loginResponse;
+    }
+
+    public boolean isApkDownloading() {
+        return isApkDownloading;
+    }
+
+    public void setApkDownloading(boolean isApkDownloading) {
+        this.isApkDownloading = isApkDownloading;
     }
 }
