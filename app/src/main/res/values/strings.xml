@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">运维-单机版</string>
     <string name="confirm_exit_app">在按一次退出运维端单机版</string>
+
+    <string name="account">账号</string>
+    <string name="code">密码</string>
+    <string name="login">登录</string>
+    <string name="login_success">登录成功</string>
+    <string name="exit">退出登录</string>
 </resources>

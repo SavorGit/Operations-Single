@@ -17,53 +17,36 @@
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <TextView
-        android:layout_marginTop="30dp"
-        android:layout_below="@id/tv_search"
-        android:id="@+id/tv_hotel"
-        android:text="酒楼名称：请搜索选择酒楼"
-        android:textSize="16sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/tv_hotel"
-        android:id="@+id/tv_location"
-        android:text="版位 ：搜索酒楼选择版位"
-        android:textSize="16sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
-    <Button
+
+    <LinearLayout
+        android:id="@+id/ll_user_info"
         android:layout_alignParentBottom="true"
-        android:textStyle="bold"
-        android:textColor="@drawable/init_color_selector"
-        android:background="@drawable/sign_button_selector"
-        android:id="@+id/btn_sign"
-        android:text="签到"
-        android:textSize="16sp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
         android:layout_marginBottom="50dp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:id="@+id/tv_user"
+            android:textSize="16sp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="40dp"
+            android:text="当前登录用户："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_alignParentBottom="true"
+            android:textStyle="bold"
+            android:textColor="@drawable/init_color_selector"
+            android:background="@drawable/sign_button_selector"
+            android:id="@+id/btn_logout"
+            android:text="退出"
+            android:textSize="16sp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+    </LinearLayout>
 
-    <Button
-        android:layout_above="@id/btn_sign"
-        android:textColor="@drawable/init_color_selector"
-        android:background="@drawable/sign_button_selector"
-        android:id="@+id/btn_fix"
-        android:text="维修"
-        android:textSize="16sp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
 </RelativeLayout>

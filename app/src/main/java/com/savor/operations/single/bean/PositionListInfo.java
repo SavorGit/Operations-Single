@@ -89,6 +89,7 @@ public class PositionListInfo implements Serializable {
 
             private String rname;
             private String boxname;
+            private String bid;
             private String mac;
             private String srtype;
             private String last_ctime;
@@ -98,6 +99,7 @@ public class PositionListInfo implements Serializable {
                 return "BoxInfoBean{" +
                         "rname='" + rname + '\'' +
                         ", boxname='" + boxname + '\'' +
+                        ", bid='" + bid + '\'' +
                         ", mac='" + mac + '\'' +
                         ", srtype='" + srtype + '\'' +
                         ", last_ctime='" + last_ctime + '\'' +
@@ -114,6 +116,8 @@ public class PositionListInfo implements Serializable {
                 if (rname != null ? !rname.equals(that.rname) : that.rname != null) return false;
                 if (boxname != null ? !boxname.equals(that.boxname) : that.boxname != null)
                     return false;
+                if (bid != null ? !bid.equals(that.bid) : that.bid != null)
+                    return false;
                 if (mac != null ? !mac.equals(that.mac) : that.mac != null) return false;
                 if (srtype != null ? !srtype.equals(that.srtype) : that.srtype != null)
                     return false;
@@ -124,6 +128,7 @@ public class PositionListInfo implements Serializable {
             public int hashCode() {
                 int result = rname != null ? rname.hashCode() : 0;
                 result = 31 * result + (boxname != null ? boxname.hashCode() : 0);
+                result = 31 * result + (bid != null ? bid.hashCode() : 0);
                 result = 31 * result + (mac != null ? mac.hashCode() : 0);
                 result = 31 * result + (srtype != null ? srtype.hashCode() : 0);
                 result = 31 * result + (last_ctime != null ? last_ctime.hashCode() : 0);
@@ -144,6 +149,14 @@ public class PositionListInfo implements Serializable {
 
             public void setBoxname(String boxname) {
                 this.boxname = boxname;
+            }
+
+            public String getBid() {
+                return bid;
+            }
+
+            public void setBid(String bid) {
+                this.bid = bid;
             }
 
             public String getMac() {

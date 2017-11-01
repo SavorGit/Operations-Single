@@ -45,6 +45,10 @@ public class AppApi {
         POST_POSITION_LIST_JSON,
         /**获取酒店版位详细信息（mac地址等）*/
         POST_HOTEL_MACINFO_JSON,
+        /**维修或者签到*/
+        POST_SUBMIT_DAMAGE_JSON,
+        /**登录*/
+        POST_LOGIN_JSON,
     }
 
     /**
@@ -60,7 +64,9 @@ public class AppApi {
             put(Action.POST_UPGRADE_JSON, formatPhpUrl("Opclient/Version/index"));
             put(Action.POST_DAMAGE_CONFIG_JSON, formatPhpUrl("Opclient/Box/getHotelBoxDamageConfig"));
             put(Action.POST_POSITION_LIST_JSON, formatPhpUrl("Tasksubcontract/Hotel/getHotelVersionById"));
-            put(Action.POST_HOTEL_MACINFO_JSON, formatPhpUrl("/Tasksubcontract/Hotel/getHotelMacInfoById"));
+            put(Action.POST_HOTEL_MACINFO_JSON, formatPhpUrl("Tasksubcontract/Hotel/getHotelMacInfoById"));
+            put(Action.POST_SUBMIT_DAMAGE_JSON, formatPhpUrl("Tasksubcontract/Box/InsertBoxDamage"));
+            put(Action.POST_LOGIN_JSON, formatPhpUrl("Opclient/login/doLogin"));
         }
     };
 
@@ -121,18 +127,19 @@ public class AppApi {
      * @param context 上下文
      * @param handler 接口回调
      */
-    public static void submitDamage(Context context, String box_mac, String hotel_id,
-                                    String remark, String repair_num_str, String state,
-                                    String type, String userid, ApiRequestListener handler) {
-//        final HashMap<String, Object> params = new HashMap<>();
-//        params.put("box_mac",box_mac);
-//        params.put("hotel_id",hotel_id);
-//        params.put("remark",remark);
-//        params.put("repair_num_str",repair_num_str);
-//        params.put("state",state);
-//        params.put("type",type);
-//        params.put("userid",userid);
-//        new AppServiceOk(context, Action.POST_SUBMIT_DAMAGE_JSON, handler, params).post();
+    public static void submitDamage(Context context, String bid, String hotel_id,
+                                    String remark, String repair_img,String repair_type,String srtype,String state,
+                                    String userid, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<>();
+        params.put("bid",bid);
+        params.put("hotel_id",hotel_id);
+        params.put("remark",remark);
+        params.put("repair_img",repair_img);
+        params.put("repair_type",repair_type);
+        params.put("state",state);
+        params.put("srtype",srtype);
+        params.put("userid",userid);
+        new AppServiceOk(context, Action.POST_SUBMIT_DAMAGE_JSON, handler, params).post();
     }
 
     /**
@@ -161,6 +168,20 @@ public class AppApi {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("hotel_id",hotel_id);
         new AppServiceOk(context, Action.POST_HOTEL_MACINFO_JSON, handler, params).post();
+    }
+
+    /**
+     * 登录
+     * @param context 上下文
+     * @param username 用户名
+     * @param password 密码
+     * @param handler 接口回调
+     */
+    public static void login(Context context, String username,String password, ApiRequestListener handler) {
+        final HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("username", username);
+        params.put("password", password);
+        new AppServiceOk(context, Action.POST_LOGIN_JSON, handler, params).post();
     }
 
     // 超时（网络）异常

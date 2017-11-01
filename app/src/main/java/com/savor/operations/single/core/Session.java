@@ -38,6 +38,7 @@ import com.common.api.utils.LogUtils;
 import com.common.api.utils.Pair;
 import com.common.api.utils.SaveFileData;
 import com.savor.operations.single.bean.DamageConfig;
+import com.savor.operations.single.bean.LoginResponse;
 import com.savor.operations.single.utils.STIDUtil;
 
 import java.io.ByteArrayInputStream;
@@ -71,6 +72,8 @@ public class Session implements Serializable{
     /** 是否已经显示引导图，没有显示则显示 */
     private boolean isNeedGuide = true;
     private boolean isScanGuide = true;
+    /**登录后返回用户信息*/
+    private static final String P_APP_LOGIN_RESPONSE = "pref.savor.login";
     private static final String P_APP_DEVICEID = "pref.savor.deviceid";
     private static final String P_APP_DAMAGE_CONFIG = "p_app_damage_config";
     private static final String P_APP_HOTELID = "pref.savor.hotelid";
@@ -180,6 +183,7 @@ public class Session implements Serializable{
     private double latestLat;
     private double latestLng;
     private DamageConfig damageConfig;
+    private LoginResponse loginResponse;
 
     private Session(Context context) {
 
@@ -282,6 +286,7 @@ public class Session implements Serializable{
 
 
     private void readSettings() {
+        loginResponse = (LoginResponse) getObj(P_APP_LOGIN_RESPONSE);
         damageConfig = (DamageConfig) getObj(P_APP_DAMAGE_CONFIG);
         deviceid = STIDUtil.getDeviceId(mContext);
         netType = mPreference.loadStringKey(P_APP_NET_TYPE, "");
@@ -596,5 +601,14 @@ public class Session implements Serializable{
 
     public double getLatestLng() {
         return latestLng;
+    }
+
+    public void setLoginResponse(LoginResponse loginResponse) {
+        this.loginResponse = loginResponse;
+        setObj(P_APP_LOGIN_RESPONSE,loginResponse);
+    }
+
+    public LoginResponse getLoginResponse() {
+        return this.loginResponse;
     }
 }

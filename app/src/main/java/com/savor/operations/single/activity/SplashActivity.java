@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.common.api.utils.LogUtils;
 import com.savor.operations.single.R;
+import com.savor.operations.single.bean.LoginResponse;
 import com.savor.operations.single.utils.LocationService;
 
 /**
@@ -26,11 +28,21 @@ public class SplashActivity extends BaseActivity {
         new Handler(){}.postDelayed(new Runnable() {
             @Override
             public void run() {
-                launchMainActivity();
+                LoginResponse loginResponse = mSession.getLoginResponse();
+                if(loginResponse == null|| TextUtils.isEmpty(loginResponse.getUserid())) {
+                    launchLoginActivity();
+                }else {
+                    launchMainActivity();
+                }
             }
         },2000);
 
         startLocation();
+    }
+
+    private void launchLoginActivity() {
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
     }
 
     private void startLocation() {

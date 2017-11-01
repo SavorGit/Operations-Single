@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.savor.operations.single.R;
 import com.savor.operations.single.bean.FixBean;
 import com.savor.operations.single.bean.Hotel;
+import com.savor.operations.single.bean.LoginResponse;
 import com.savor.operations.single.bean.PositionListInfo;
 import com.savor.operations.single.utils.ActivitiesManager;
 import com.savor.operations.single.widget.CommonDialog;
@@ -28,12 +29,10 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private long exitTime;
-    private TextView mHotelNameTv;
-    private TextView mLocationTv;
     private TextView mSearchTv;
     private FixBean fixBean;
-    private Button mFixBtn;
-    private Button mSignBtn;
+    private TextView mUserInfo;
+    private Button mLogoutBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +47,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void getViews() {
         mSearchTv = (TextView) findViewById(R.id.tv_search);
-        mHotelNameTv = (TextView) findViewById(R.id.tv_hotel);
-        mLocationTv = (TextView) findViewById(R.id.tv_location);
 
-        mFixBtn = (Button) findViewById(R.id.btn_fix);
-        mSignBtn = (Button) findViewById(R.id.btn_sign);
+        mUserInfo = (TextView) findViewById(R.id.tv_user);
+        mLogoutBtn = (Button) findViewById(R.id.btn_logout);
     }
 
     @Override
     public void setViews() {
-
+        LoginResponse loginResponse = mSession.getLoginResponse();
+        if(loginResponse!=null) {
+            String nickname = loginResponse.getNickname();
+            mUserInfo.setText("当前登录用户："+nickname);
+        }
     }
 
     @Override
     public void setListeners() {
         mSearchTv.setOnClickListener(this);
-        mFixBtn.setOnClickListener(this);
-        mSignBtn.setOnClickListener(this);
+        mLogoutBtn.setOnClickListener(this);
     }
 
 
@@ -89,26 +89,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_fix:
-                if(fixBean==null|| TextUtils.isEmpty(fixBean.getHotel_id())||TextUtils.isEmpty(fixBean.getBox_mac())) {
-                    new CommonDialog(this, "请选择酒楼和版位", new CommonDialog.OnConfirmListener() {
-                        @Override
-                        public void onConfirm() {
+            case R.id.btn_logout:
+                new CommonDialog(this, "是否退出？", new CommonDialog.OnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        mSession.setLoginResponse(null);
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, new CommonDialog.OnCancelListener() {
+                    @Override
+                    public void onCancel() {
 
-                        }
-                    }).show();
-                }else {
-                    new FixDialog(this, new FixDialog.OnSubmitBtnClickListener() {
-                        @Override
-                        public void onSubmitClick(FixDialog.OperationType type, PositionListInfo fixHistoryResponse, FixDialog.FixState isResolve, List<String> damageDesc, String comment, Hotel hotel) {
-
-                        }
-                    }, FixDialog.OperationType.TYPE_BOX,null,mSession.getDamageConfig(),null).show();
-                }
+                    }
+                },"确定").show();
                 break;
             case R.id.tv_search:
                 Intent intent = new Intent(this,SearchHotelActivity.class);
                 startActivityForResult(intent,HotelPositionInfoAcitivty.REQUEST_CODE_SELECT);
+                break;
         }
     }
 

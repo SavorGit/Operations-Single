@@ -66,6 +66,9 @@
         <activity
             android:name=".activity.HotelMacInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
