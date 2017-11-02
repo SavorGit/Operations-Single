@@ -11,8 +11,8 @@ public class ConstantValues {
     public static final String LOG_CHECKWIFI_PREFIX = "savor:pro checkWifi";
     //阿里oss配置参数
     /** endpoint是阿里云 OSS 服务在各个区域的地址*/
-    public static final String ENDPOINT = "http://devp.oss.littlehotspot.com/";
-//    public static final String ENDPOINT = "http://oss.littlehotspot.com/";
+//    public static final String ENDPOINT = "http://devp.oss.littlehotspot.com/";
+    public static final String ENDPOINT = "http://oss.littlehotspot.com/";
     /**阿里oss需要的keyid*/
     public static final String ACCESS_KEY_ID = "LTAIl7SuyV5LOrxT";
     /**阿里oss需要的key secret*/
@@ -25,7 +25,7 @@ public class ConstantValues {
     /**预发布环境桶名*/
     public static final String BUCKET_PRODUCT = "redian-development";
     /**oss桶名称*/
-    public static final String BUCKET_NAME = BUCKET_PRODUCT;
+    public static final String BUCKET_NAME = BUCKET_RELESE;
 
     public static final String APP_KEY = "savor4321abcd1234";
     /**测试环境H5帮助页地址**/
